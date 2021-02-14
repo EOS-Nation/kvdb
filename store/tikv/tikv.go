@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/url"
 	"strings"
+	"time"
 
 	"github.com/dfuse-io/kvdb/store"
 	"github.com/dfuse-io/logging"
@@ -81,6 +82,9 @@ func NewStore(dsnString string) (store.KVStore, error) {
 	if err != nil {
 		return nil, fmt.Errorf("TiKV raw batch pair count option %q is not a valid number: %w", rawValue, err)
 	}
+
+	// todo testing higher timeouts
+	clientConfig.RPC.ReadTimeoutShort = 60 * time.Second
 
 	compression, _ := dsnQuery.StringOption("compression", "")
 
